@@ -15,3 +15,16 @@ export type IPost = {
   title: string;
   body: string;
 };
+
+export type ILoginFormProp = {
+  username: string;
+  password: string;
+};
+
+export type RegisterFormProp = {
+  username: string;
+  password: string;
+  email?: string;
+  phoneNumber: string;
+  name: string;
+};

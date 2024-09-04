@@ -39,16 +39,10 @@ export default function Layout({
           <ListItem>
             TEACHERS <Divider />
           </ListItem>
+          <ListItem></ListItem>
         </List>
       </div>
-      <div style={{ display: "flex" }}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div>{user}</div>
-          <div>{revenue}</div>
-        </div>
-        <div style={{ display: "flex", flex: 1 }}>{notification}</div>
-      </div>
-      {/* <h1>{children}</h1> */}
+      <div style={{ display: "flex", flexDirection: "column" }}>{children}</div>
     </div>
   ) : (
     <>
