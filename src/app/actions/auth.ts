@@ -1,7 +1,5 @@
 "use server";
 
-const URL = process.env;
-
 import { redirect } from "next/navigation";
 import { createSession, deleteSession } from "../_lib/lib";
 

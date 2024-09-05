@@ -4,3 +4,5 @@ export * from "../app/layout";
 export * from "./post";
 export * from "./logoutButton";
 export * from "./registerForm";
+export * from "./SideBar";
+export * from "./CategoryForm";

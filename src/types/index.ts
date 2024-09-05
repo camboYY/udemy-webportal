@@ -21,6 +21,11 @@ export type ILoginFormProp = {
   password: string;
 };
 
+export type ICategoryFormProp = {
+  name: string;
+  parentId: string;
+};
+
 export type RegisterFormProp = {
   username: string;
   password: string;

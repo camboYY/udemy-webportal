@@ -17,7 +17,7 @@ export function LogoutButton({ logout }: { logout: () => Promise<void> }) {
 
   return (
     <Button isLoading={loading} onClick={handleLogout}>
-      Login
+      Logout
     </Button>
   );
 }

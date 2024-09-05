@@ -5,8 +5,14 @@ import { Footer, Navbar } from "@/components";
 import Image from "next/image";
 import logo from "../assets/elearning.png";
 import { Box, Text } from "@chakra-ui/react";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "E-learning - Dashboard",
+  description: "Welcome Udemy E-learning, by udemy BBU team",
+};
 
 export default function RootLayout({
   children,

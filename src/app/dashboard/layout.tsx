@@ -1,5 +1,12 @@
-import { Divider, List, ListItem } from "@chakra-ui/react";
+import { Button, Divider, List, ListItem } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
+import { Metadata } from "next";
+import { SideBar } from "@/components";
+
+export const metadata: Metadata = {
+  title: "E-learning - Dashboard",
+  description: "Welcome Udemy E-learning, by udemy BBU team",
+};
 
 export default function Layout({
   children,
@@ -14,12 +21,8 @@ export default function Layout({
   user: ReactNode;
   login: ReactNode;
 }) {
-  let isLogin = true;
-
-  return isLogin ? (
-    <div
-      style={{ display: "flex", borderWidth: 1, borderColor: "ActiveCaption" }}
-    >
+  return (
+    <div style={{ display: "flex", backgroundColor: "whitesmoke" }}>
       <div
         style={{
           display: "flex",
@@ -27,28 +30,18 @@ export default function Layout({
           flexBasis: "13%",
         }}
       >
-        <List>
-          <ListItem>
-            ORDERS
-            <Divider />
-          </ListItem>
-
-          <ListItem>
-            PAYMENTS <Divider />
-          </ListItem>
-          <ListItem>
-            TEACHERS <Divider />
-          </ListItem>
-          <ListItem></ListItem>
-        </List>
+        <SideBar />
       </div>
-      <div style={{ display: "flex", flexDirection: "column" }}>{children}</div>
+      <div
+        style={{
+          marginLeft: 10,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {children}
+      </div>
     </div>
-  ) : (
-    <>
-      <h1>{children}</h1>
-
-      <div>{login}</div>
-    </>
   );
 }
