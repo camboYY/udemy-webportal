@@ -43,6 +43,6 @@ export async function login({
   if (auth.ok) {
     const { token } = await auth.json();
     await createSession(token);
-    redirect("/dashboard");
+    redirect("/dashboard/overview");
   }
 }

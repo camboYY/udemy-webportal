@@ -4,7 +4,13 @@ import { Button, Divider, List, ListItem } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
-type ACTIVE = "invoices" | "payments" | "products" | "teachers" | "categories";
+type ACTIVE =
+  | "invoices"
+  | "payments"
+  | "products"
+  | "teachers"
+  | "categories"
+  | "overview";
 
 export function SideBar() {
   const nav = useRouter();
@@ -20,6 +26,16 @@ export function SideBar() {
 
   return (
     <List>
+      <ListItem>
+        <Button
+          isActive={selectedMenu === ""}
+          style={{ width: "100%" }}
+          onClick={() => handleNavigateTo("overview")}
+        >
+          OVERVIEW
+        </Button>
+      </ListItem>
+      <Divider />
       <ListItem>
         <Button
           isActive={selectedMenu === "invoices"}
