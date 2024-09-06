@@ -14,7 +14,7 @@ type ACTIVE =
 
 export function SideBar() {
   const nav = useRouter();
-  const [selectedMenu, setSelectedMenu] = useState("");
+  const [selectedMenu, setSelectedMenu] = useState("overview");
 
   const handleNavigateTo = useCallback(
     (path: ACTIVE) => {
@@ -28,7 +28,7 @@ export function SideBar() {
     <List>
       <ListItem>
         <Button
-          isActive={selectedMenu === ""}
+          isActive={selectedMenu === "overview"}
           style={{ width: "100%" }}
           onClick={() => handleNavigateTo("overview")}
         >
