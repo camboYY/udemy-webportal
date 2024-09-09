@@ -25,10 +25,10 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession(userId: string) {
+export async function createSession(token: string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ userId, expiresAt });
-
+  const session = await encrypt({ token, expiresAt });
+  cookies().set("token", token);
   cookies().set("session", session, {
     httpOnly: true,
     secure: true,
@@ -58,10 +58,16 @@ export async function updateSession() {
 
 export function deleteSession() {
   cookies().delete("session");
+  cookies().delete("token");
 }
 
 export async function getSession() {
   const session = cookies().get("session")?.value;
   if (!session) return null;
   return await decrypt(session);
+}
+
+export function getToken() {
+  const token = cookies().get("token")?.value;
+  return token;
 }

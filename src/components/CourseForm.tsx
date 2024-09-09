@@ -31,9 +31,9 @@ export function CategoryForm({
   const onSubmit = useCallback(
     async (values: ICategoryFormProp) => {
       setLoading(true);
-      const { parentId, name } = values;
+
       try {
-        await onCreate({ name, parentId });
+        await onCreate({ ...values });
         toast({
           title: "Category created.",
           description: "Your category has been created!",

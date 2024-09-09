@@ -23,7 +23,8 @@ export type ILoginFormProp = {
 
 export type ICategoryFormProp = {
   name: string;
-  parentId: string;
+  parentId?: string;
+  id?: number;
 };
 
 export type RegisterFormProp = {
@@ -33,3 +34,5 @@ export type RegisterFormProp = {
   phoneNumber: string;
   name: string;
 };
+
+export type ICourseFormProp = {};
