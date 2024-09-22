@@ -22,8 +22,7 @@ export function LoginForm({
       const { username, password } = values;
       setLoading(true);
       try {
-        const sign = await login({ username, password });
-        console.log({ sign });
+        await login({ username, password });
       } catch (e) {
         console.log(e);
       } finally {

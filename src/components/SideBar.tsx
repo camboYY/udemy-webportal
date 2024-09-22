@@ -7,10 +7,11 @@ import React, { useCallback, useState } from "react";
 type ACTIVE =
   | "invoices"
   | "payments"
-  | "products"
+  | "courses"
   | "teachers"
   | "categories"
-  | "overview";
+  | "overview"
+  | "courseTag";
 
 export function SideBar() {
   const nav = useRouter();
@@ -67,11 +68,21 @@ export function SideBar() {
       <Divider />
       <ListItem>
         <Button
-          isActive={selectedMenu === "products"}
-          onClick={() => handleNavigateTo("products")}
+          isActive={selectedMenu === "courses"}
+          onClick={() => handleNavigateTo("courses")}
           style={{ width: "100%" }}
         >
-          PRODUCTS
+          COURSE
+        </Button>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <Button
+          isActive={selectedMenu === "courseTag"}
+          onClick={() => handleNavigateTo("courseTag")}
+          style={{ width: "100%" }}
+        >
+          COURSE TAG
         </Button>
       </ListItem>
       <Divider />

@@ -15,12 +15,13 @@ import { useToast } from "@chakra-ui/react";
 
 export function CategoryForm({
   onCreate,
+  categories,
 }: {
   onCreate: (props: ICategoryFormProp) => Promise<void>;
+  categories: ICategoryFormProp[];
 }) {
   const toast = useToast({ position: "top" });
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<ICategoryFormProp[]>([]);
 
   const initialValues: ICategoryFormProp = {
     name: "",
@@ -56,13 +57,6 @@ export function CategoryForm({
       .required("Required"),
     parentId: Yup.string().optional(),
   });
-
-  useEffect(() => {
-    fetch("http://103.252.119.85:8080/api/categories").then(async (res) => {
-      const foundCategories = await res.json();
-      setCategories(foundCategories);
-    });
-  }, [loading]);
 
   return (
     <Formik

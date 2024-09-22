@@ -1,42 +1,52 @@
 "use client";
 import {
   Button,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   Input,
   Select,
+  Textarea,
 } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import styled from "@emotion/styled";
-import { ICategoryFormProp } from "@/types";
 import { useToast } from "@chakra-ui/react";
+import { ICategoryFormProp, ICourseFormProp, User } from "@/types";
 
-export function CategoryForm({
+export function CourseForm({
   onCreate,
+  users,
+  categories,
 }: {
-  onCreate: (props: ICategoryFormProp) => Promise<void>;
+  onCreate: (props: ICourseFormProp) => Promise<void>;
+  users: User[];
+  categories: ICategoryFormProp[];
 }) {
   const toast = useToast({ position: "top" });
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<ICategoryFormProp[]>([]);
 
-  const initialValues: ICategoryFormProp = {
-    name: "",
-    parentId: "",
-    id: 0,
+  const initialValues: ICourseFormProp = {
+    title: "",
+    price: 0,
+    courseBy: 0,
+    categoryId: 0,
+    createdBy: 0,
+    courseInclude: "",
+    courseLearning: "",
+    status: 0,
   };
 
   const onSubmit = useCallback(
-    async (values: ICategoryFormProp) => {
+    async (values: ICourseFormProp) => {
       setLoading(true);
 
       try {
         await onCreate({ ...values });
         toast({
-          title: "Category created.",
-          description: "Your category has been created!",
+          title: "Course created.",
+          description: "Your course has been created!",
           status: "success",
           duration: 9000,
         });
@@ -49,25 +59,28 @@ export function CategoryForm({
     [onCreate, toast]
   );
 
-  const loginSchema = Yup.object().shape({
-    name: Yup.string()
+  const courseSchema = Yup.object().shape({
+    title: Yup.string()
       .min(2, "Too Short!")
       .max(50, "Too Long!")
       .required("Required"),
-    parentId: Yup.string().optional(),
+    price: Yup.number()
+      .min(1, "Too Short!")
+      .max(50, "Too Long!")
+      .required("Required"),
+    courseBy: Yup.number().nullable(),
+    courseInclude: Yup.string().required("required."),
+    courseLearning: Yup.string().required("required"),
+    satus: Yup.boolean().optional(),
+    categoryId: Yup.number().required("Required"),
+    createdBy: Yup.number().required("Required"),
+    thumbnailUrl: Yup.string().optional(),
   });
-
-  useEffect(() => {
-    fetch("http://103.252.119.85:8080/api/categories").then(async (res) => {
-      const foundCategories = await res.json();
-      setCategories(foundCategories);
-    });
-  }, [loading]);
 
   return (
     <Formik
       onSubmit={onSubmit}
-      validationSchema={loginSchema}
+      validationSchema={courseSchema}
       initialValues={initialValues}
     >
       {({
@@ -76,55 +89,202 @@ export function CategoryForm({
         handleBlur,
         handleChange,
         handleSubmit,
-        values: { name, parentId },
+        values: {
+          title,
+          price,
+          courseBy,
+          courseInclude,
+          courseLearning,
+          status,
+          categoryId,
+          createdBy,
+          thumbnailUrl,
+        },
       }) => {
         return (
           <form onSubmit={handleSubmit}>
             <StyledContainer>
               <FormControl
                 style={{ marginBottom: 15 }}
-                isInvalid={!!(errors.name && touched.name)}
+                isInvalid={!!(errors.title && touched.title)}
               >
                 <Input
                   type="text"
-                  name="name"
-                  placeholder="Category name"
+                  name="title"
+                  placeholder="Title"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={name}
+                  value={title}
                 />
-                {errors.name && touched.name ? (
-                  <FormErrorMessage>{errors?.name}</FormErrorMessage>
+                {errors.title && touched.title ? (
+                  <FormErrorMessage>{errors?.title}</FormErrorMessage>
                 ) : null}
               </FormControl>
               <FormControl
-                isInvalid={!!(errors.parentId && touched.parentId)}
                 style={{ marginBottom: 15 }}
+                isInvalid={!!(errors.price && touched.price)}
+              >
+                <Input
+                  type="number"
+                  name="price"
+                  placeholder="Price"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={price}
+                />
+                {errors.price && touched.price ? (
+                  <FormErrorMessage>{errors?.price}</FormErrorMessage>
+                ) : null}
+              </FormControl>
+              <FormControl
+                style={{ marginBottom: 15 }}
+                isInvalid={!!(errors.courseInclude && touched.courseInclude)}
+              >
+                <Textarea
+                  name="courseInclude"
+                  placeholder="Course Include"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={courseInclude}
+                  size="sm"
+                />
+                {errors.courseInclude && touched.courseInclude ? (
+                  <FormErrorMessage>{errors?.courseInclude}</FormErrorMessage>
+                ) : null}
+              </FormControl>
+              <FormControl
+                style={{ marginBottom: 15 }}
+                isInvalid={!!(errors.courseLearning && touched.courseLearning)}
+              >
+                <Textarea
+                  name="courseLearning"
+                  placeholder="Course Learning"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={courseLearning}
+                  size="sm"
+                />
+                {errors.courseLearning && touched.courseLearning ? (
+                  <FormErrorMessage>{errors?.courseLearning}</FormErrorMessage>
+                ) : null}
+              </FormControl>
+              <FormControl
+                style={{ marginBottom: 15 }}
+                isInvalid={!!(errors.categoryId && touched.categoryId)}
               >
                 <Select
-                  placeholder="Select parentId"
-                  name="parentId"
-                  value={parentId}
+                  placeholder="Select Category"
+                  name="categoryId"
+                  value={categoryId}
                   onBlur={handleBlur}
                   onChange={handleChange}
                 >
-                  {categories.length > 0 ? (
-                    categories.map((x, i) => (
-                      <>
-                        <option key={i} value={x.id}>
-                          {x.name}
-                        </option>
-                      </>
-                    ))
-                  ) : (
-                    <option value="0">default parent cateogry</option>
-                  )}
+                  {categories.length > 0
+                    ? categories.map((x, i) => (
+                        <>
+                          <option key={i} value={x.id}>
+                            {x.name}
+                          </option>
+                        </>
+                      ))
+                    : null}
                 </Select>
-                {errors.parentId && touched.parentId ? (
-                  <FormErrorMessage>{errors?.parentId}</FormErrorMessage>
+                {errors.categoryId && touched.categoryId ? (
+                  <FormErrorMessage>{errors?.categoryId}</FormErrorMessage>
+                ) : null}
+              </FormControl>
+              <FormControl
+                style={{ marginBottom: 15 }}
+                isInvalid={!!(errors.status && touched.status)}
+              >
+                <Checkbox
+                  value={status}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  colorScheme="red"
+                >
+                  Publish Now
+                </Checkbox>
+                {errors.status && touched.status ? (
+                  <FormErrorMessage>{errors?.status}</FormErrorMessage>
+                ) : null}
+              </FormControl>
+              <FormControl
+                style={{ marginBottom: 15 }}
+                isInvalid={!!(errors.courseBy && touched.courseBy)}
+              >
+                <Select
+                  placeholder="Select Trainer"
+                  name="courseBy"
+                  value={courseBy}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                >
+                  {users.length > 0
+                    ? users.map((x, i) => (
+                        <>
+                          <option key={i} value={x.id}>
+                            {x.name}
+                          </option>
+                        </>
+                      ))
+                    : null}
+                </Select>
+                {errors.courseBy && touched.courseBy ? (
+                  <FormErrorMessage>{errors?.courseBy}</FormErrorMessage>
+                ) : null}
+              </FormControl>
+              <FormControl
+                isInvalid={!!(errors.createdBy && touched.createdBy)}
+                style={{ marginBottom: 15 }}
+              >
+                <Select
+                  placeholder="Select Author"
+                  name="createdBy"
+                  value={createdBy}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                >
+                  {users.length > 0
+                    ? users.map((x, i) => (
+                        <>
+                          <option key={i} value={x.id}>
+                            {x.name}
+                          </option>
+                        </>
+                      ))
+                    : null}
+                </Select>
+                {errors.createdBy && touched.createdBy ? (
+                  <FormErrorMessage>{errors?.createdBy}</FormErrorMessage>
                 ) : null}
               </FormControl>
 
+              <FormControl
+                isInvalid={!!(errors.createdBy && touched.createdBy)}
+                style={{ marginBottom: 15 }}
+              >
+                <Select
+                  placeholder="Select Author"
+                  name="createdBy"
+                  value={createdBy}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                >
+                  {users.length > 0
+                    ? users.map((x, i) => (
+                        <>
+                          <option key={i} value={x.id}>
+                            {x.name}
+                          </option>
+                        </>
+                      ))
+                    : null}
+                </Select>
+                {errors.createdBy && touched.createdBy ? (
+                  <FormErrorMessage>{errors?.createdBy}</FormErrorMessage>
+                ) : null}
+              </FormControl>
               <Button isLoading={loading} type="submit">
                 Submit
               </Button>
