@@ -17,7 +17,6 @@ export function RegisterForm({
 
   const onSubmit = useCallback(
     async (values: RegisterFormProp) => {
-      console.log({ values });
       try {
         setLoading(true);
 

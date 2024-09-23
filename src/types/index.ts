@@ -21,6 +21,7 @@ export type RegisterFormProp = {
   email?: string;
   phoneNumber: string;
   name?: string;
+  password: string;
 };
 
 export type User = {
