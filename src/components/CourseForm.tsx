@@ -26,6 +26,7 @@ export function CourseForm({
 }) {
   const toast = useToast({ position: "top" });
   const [loading, setLoading] = useState(false);
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
 
   const initialValues: ICourseFormProp = {
     title: "",
@@ -36,6 +37,7 @@ export function CourseForm({
     courseInclude: "",
     courseLearning: "",
     status: 0,
+    thumbnailUrl: "",
   };
 
   const onSubmit = useCallback(
@@ -43,7 +45,7 @@ export function CourseForm({
       setLoading(true);
 
       try {
-        await onCreate({ ...values });
+        await onCreate({ ...values, thumbnailUrl });
         toast({
           title: "Course created.",
           description: "Your course has been created!",
@@ -56,7 +58,7 @@ export function CourseForm({
         setLoading(false);
       }
     },
-    [onCreate, toast]
+    [onCreate, toast, thumbnailUrl]
   );
 
   const courseSchema = Yup.object().shape({
@@ -76,6 +78,38 @@ export function CourseForm({
     createdBy: Yup.number().required("Required"),
     thumbnailUrl: Yup.string().optional(),
   });
+
+  const onUploadFile = async (fileInput: string) => {
+    const getUploadUrl = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/b6563a58441e13961e89a7cbc2cec3b3/stream/direct_upload`,
+      {
+        headers: {
+          Authorization: "Bearer vmrZjHrDkPvPgWCSUFlIMyJ7VWe5E0m-rfF9q5vD",
+          "Content-Type": "text/plain",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          maxDurationSeconds: 3600,
+        }),
+      }
+    );
+
+    const {
+      result: { uploadURL },
+    } = await getUploadUrl.json();
+
+    const formData = new FormData();
+    formData.append("file", fileInput);
+    const uploadUrl = await fetch(`${uploadURL}`, {
+      headers: {
+        Authorization: `Bearer vmrZjHrDkPvPgWCSUFlIMyJ7VWe5E0m-rfF9q5vD`,
+      },
+      method: "POST",
+      body: formData,
+    });
+    const imageUrl = await uploadUrl.json();
+    return imageUrl;
+  };
 
   return (
     <Formik
@@ -285,6 +319,26 @@ export function CourseForm({
                   <FormErrorMessage>{errors?.createdBy}</FormErrorMessage>
                 ) : null}
               </FormControl>
+              {/* <FormControl
+                isInvalid={!!(errors.thumbnailUrl && touched.thumbnailUrl)}
+                style={{ marginBottom: 15 }}
+              >
+                <Input
+                  name="thumbnailUrl"
+                  id="upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const url = await onUploadFile(e.target.value);
+                    console.log({ url });
+                    setThumbnailUrl(url);
+                  }}
+                  value={thumbnailUrl}
+                />
+                {errors.thumbnailUrl && touched.thumbnailUrl ? (
+                  <FormErrorMessage>{errors?.thumbnailUrl}</FormErrorMessage>
+                ) : null}
+              </FormControl> */}
               <Button isLoading={loading} type="submit">
                 Submit
               </Button>

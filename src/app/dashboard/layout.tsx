@@ -38,6 +38,8 @@ export default function Layout({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          paddingTop: 10,
+          paddingBottom: 10,
         }}
       >
         {children}

@@ -18,6 +18,7 @@ export function CourseTagForm({
   const toast = useToast({ position: "top" });
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [courseNotFound, setCourseNotFound] = useState("");
 
   const [query, setQuery] = useState("");
   const [course, setCourse] = useState<ICourseFormWithIdProp | undefined>(
@@ -41,6 +42,11 @@ export function CourseTagForm({
     setSearchLoading(true);
     const courseList = await onSearchCourse(query);
     setCourses(courseList);
+    if (courseList.length === 0) {
+      setCourseNotFound("Course not found");
+    } else {
+      setCourseNotFound("");
+    }
     setSearchLoading(false);
   }, [query, onSearchCourse]);
 
@@ -81,7 +87,13 @@ export function CourseTagForm({
       <div
         style={{ display: "flex", marginTop: 10, marginBottom: 20, border: 1 }}
       >
-        <Input value={query} name="course" onChange={onSetQuery} type="text" />
+        <Input
+          value={query}
+          name="course"
+          placeholder="Search course title"
+          onChange={onSetQuery}
+          type="text"
+        />
         <Button type="button" isLoading={searchLoading} onClick={onSearch}>
           Search
         </Button>
@@ -102,10 +114,11 @@ export function CourseTagForm({
           return (
             <form onSubmit={handleSubmit}>
               <StyledContainer>
-                {courses.length > 0 ? (
+                {courses.length > 0 && (
                   <CourseCard onChosen={onCourseChosen} courses={courses} />
-                ) : (
-                  <h2 style={{ marginBottom: 10 }}>Course not found</h2>
+                )}
+                {!!courseNotFound && (
+                  <h2 style={{ marginBottom: 10 }}>{courseNotFound}</h2>
                 )}
                 <FormControl
                   style={{ marginBottom: 15 }}
@@ -123,25 +136,25 @@ export function CourseTagForm({
                     <FormErrorMessage>{errors?.title}</FormErrorMessage>
                   ) : null}
                 </FormControl>
-                <FormControl
-                  isInvalid={!!(errors.courseId && touched.courseId)}
-                  style={{ marginBottom: 15 }}
-                >
-                  <div
-                    style={{
-                      padding: 10,
-                      borderRadius: 5,
-                      backgroundColor: "#6A9AB0",
-                    }}
+                {!!course ? (
+                  <FormControl
+                    isInvalid={!!(errors.courseId && touched.courseId)}
+                    style={{ marginBottom: 15 }}
                   >
-                    <div style={{ color: "white" }}>
-                      {!!course && course?.title}
+                    <div
+                      style={{
+                        padding: 10,
+                        borderRadius: 5,
+                        backgroundColor: "#6A9AB0",
+                      }}
+                    >
+                      <div style={{ color: "white" }}>{course?.title}</div>
                     </div>
-                  </div>
-                  {errors.courseId && touched.courseId ? (
-                    <FormErrorMessage>{errors?.courseId}</FormErrorMessage>
-                  ) : null}
-                </FormControl>
+                    {errors.courseId && touched.courseId ? (
+                      <FormErrorMessage>{errors?.courseId}</FormErrorMessage>
+                    ) : null}
+                  </FormControl>
+                ) : null}
 
                 <Button isLoading={loading} type="submit">
                   Submit
