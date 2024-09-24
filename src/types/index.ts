@@ -38,7 +38,7 @@ export type ICourseFormProp = {
   courseBy: number;
   courseInclude: string;
   courseLearning: string;
-  status: number;
+  status: boolean;
   categoryId: number;
   createdBy: number;
   thumbnailUrl?: string;
@@ -53,6 +53,19 @@ export type CourseProps = ICourseFormProp & { id: number };
 export type ICourseTag = {
   title: string;
   courseId: number;
+};
+
+export type ICourseLesson = {
+  title: string;
+  courseId: number;
+  description: string;
+  videoUrl: string;
+  status: boolean;
+  createdBy: number;
+};
+
+export type ICourseLessonForm = ICourseLesson & {
+  id: number;
 };
 
 export type ICourseTagProps = ICourseTag & { id: number };

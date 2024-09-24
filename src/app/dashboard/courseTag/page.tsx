@@ -1,4 +1,3 @@
-import { getToken } from "@/app/_lib/lib";
 import { onSearchCourse, onCreateCourseTag } from "@/app/actions/course";
 import { CourseTagForm } from "@/components/CourseTagForm";
 import React from "react";

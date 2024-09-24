@@ -1,11 +1,11 @@
 "use server";
 
-import { ICourseFormProp, ICourseTag } from "@/types";
+import { ICourseFormProp, ICourseLesson, ICourseTag } from "@/types";
 
 export async function createCourse(props: ICourseFormProp) {
   const result = await fetch("http://103.252.119.85:8080/api/courses", {
     method: "POST",
-    body: JSON.stringify({ ...props }),
+    body: JSON.stringify({ ...props, status: props.status ? 1 : 0 }),
     headers: new Headers({
       "content-type": "application/json",
     }),
@@ -42,6 +42,21 @@ export async function onSearchCourse(course?: string) {
     );
 
     if (result.ok) return await result.json();
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function onCreateCourseLesson(props: ICourseLesson) {
+  try {
+    const result = await fetch("http://103.252.119.85:8080/api/courseLessons", {
+      method: "POST",
+      body: JSON.stringify({ ...props, status: props.status ? 1 : 0 }),
+      headers: new Headers({ "content-type": "application/json" }),
+      mode: "no-cors",
+    });
+
+    return await result.json();
   } catch (e) {
     console.log(e);
   }

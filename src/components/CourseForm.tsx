@@ -36,14 +36,13 @@ export function CourseForm({
     createdBy: 0,
     courseInclude: "",
     courseLearning: "",
-    status: 0,
+    status: false,
     thumbnailUrl: "",
   };
 
   const onSubmit = useCallback(
     async (values: ICourseFormProp) => {
       setLoading(true);
-      console.log({ ...values, thumbnailUrl });
       try {
         await onCreate({ ...values, thumbnailUrl });
         toast({
@@ -101,38 +100,6 @@ export function CourseForm({
     },
     []
   );
-
-  const onUploadFile = async (fileInput: string) => {
-    const getUploadUrl = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/b6563a58441e13961e89a7cbc2cec3b3/stream/direct_upload`,
-      {
-        headers: {
-          Authorization: "Bearer vmrZjHrDkPvPgWCSUFlIMyJ7VWe5E0m-rfF9q5vD",
-          "Content-Type": "text/plain",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          maxDurationSeconds: 3600,
-        }),
-      }
-    );
-
-    const {
-      result: { uploadURL },
-    } = await getUploadUrl.json();
-
-    const formData = new FormData();
-    formData.append("file", fileInput);
-    const uploadUrl = await fetch(`${uploadURL}`, {
-      headers: {
-        Authorization: `Bearer vmrZjHrDkPvPgWCSUFlIMyJ7VWe5E0m-rfF9q5vD`,
-      },
-      method: "POST",
-      body: formData,
-    });
-    const imageUrl = await uploadUrl.json();
-    return imageUrl;
-  };
 
   return (
     <Formik
@@ -248,11 +215,9 @@ export function CourseForm({
                 >
                   {categories.length > 0
                     ? categories.map((x, i) => (
-                        <>
-                          <option key={i} value={x.id}>
-                            {x.name}
-                          </option>
-                        </>
+                        <option key={i} value={x.id}>
+                          {x.name}
+                        </option>
                       ))
                     : null}
                 </Select>
@@ -265,10 +230,11 @@ export function CourseForm({
                 isInvalid={!!(errors.status && touched.status)}
               >
                 <Checkbox
-                  value={status}
+                  value={status ? 1 : 0}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   colorScheme="red"
+                  name="satus"
                 >
                   Publish Now
                 </Checkbox>

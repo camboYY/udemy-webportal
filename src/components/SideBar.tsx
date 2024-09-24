@@ -11,7 +11,8 @@ type ACTIVE =
   | "teachers"
   | "categories"
   | "overview"
-  | "courseTag";
+  | "courseTag"
+  | "courseLessons";
 
 export function SideBar() {
   const nav = useRouter();
@@ -83,6 +84,15 @@ export function SideBar() {
           style={{ width: "100%" }}
         >
           COURSE TAG
+        </Button>
+      </ListItem>
+      <ListItem>
+        <Button
+          isActive={selectedMenu === "courseLessons"}
+          onClick={() => handleNavigateTo("courseLessons")}
+          style={{ width: "100%" }}
+        >
+          COURSE LESSON
         </Button>
       </ListItem>
       <Divider />
