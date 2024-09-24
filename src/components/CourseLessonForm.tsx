@@ -11,7 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useCallback, useState } from "react";
-import { Formik } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import styled from "@emotion/styled";
 import {
@@ -163,7 +163,10 @@ export function CourseLessonForm({
   }, []);
 
   const onSubmit = useCallback(
-    async (values: ICourseLesson) => {
+    async (
+      values: ICourseLesson,
+      { resetForm }: FormikHelpers<ICourseLesson>
+    ) => {
       setLoading(true);
 
       try {
@@ -178,6 +181,7 @@ export function CourseLessonForm({
           status: "success",
           duration: 9000,
         });
+        resetForm();
       } catch (e) {
         console.log(e);
       } finally {

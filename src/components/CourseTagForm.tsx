@@ -1,7 +1,7 @@
 "use client";
 import { Button, FormControl, FormErrorMessage, Input } from "@chakra-ui/react";
 import React, { ChangeEvent, useCallback, useState } from "react";
-import { Formik } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import styled from "@emotion/styled";
 import { ICourseFormProp, ICourseFormWithIdProp, ICourseTag } from "@/types";
@@ -42,6 +42,9 @@ export function CourseTagForm({
     setSearchLoading(true);
     const courseList = await onSearchCourse(query);
     setCourses(courseList);
+    if (courseList.length === 1) {
+      setCourse(courseList[0]);
+    }
     if (courseList.length === 0) {
       setCourseNotFound("Course not found");
     } else {
@@ -55,7 +58,7 @@ export function CourseTagForm({
   }, []);
 
   const onSubmit = useCallback(
-    async (values: ICourseTag) => {
+    async (values: ICourseTag, { resetForm }: FormikHelpers<ICourseTag>) => {
       setLoading(true);
       try {
         await onCreate({ ...values, courseId: Number(course?.id) });
@@ -65,6 +68,7 @@ export function CourseTagForm({
           status: "success",
           duration: 9000,
         });
+        resetForm();
       } catch (e) {
         console.log(e);
       } finally {

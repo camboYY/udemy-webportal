@@ -1,5 +1,6 @@
-import { createCourse } from "@/app/actions/course";
+import { createCourse, onSearchCourse } from "@/app/actions/course";
 import { CourseForm } from "@/components/CourseForm";
+import { UpdateCourse } from "@/components/UpdateCourse";
 import React from "react";
 
 export default async function Courses() {
@@ -17,6 +18,13 @@ export default async function Courses() {
   let categories = await categoryList.json();
 
   return (
-    <CourseForm onCreate={createCourse} categories={categories} users={users} />
+    <div style={{ display: "flex" }}>
+      <CourseForm
+        onCreate={createCourse}
+        categories={categories}
+        users={users}
+      />
+      <UpdateCourse onSearchCourse={onSearchCourse} />
+    </div>
   );
 }

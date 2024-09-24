@@ -5,11 +5,13 @@ import {
   FormControl,
   FormErrorMessage,
   Input,
+  InputGroup,
+  InputLeftElement,
   Select,
   Textarea,
 } from "@chakra-ui/react";
-import React, { useCallback, useRef, useState } from "react";
-import { Formik } from "formik";
+import React, { useCallback, useState } from "react";
+import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import styled from "@emotion/styled";
 import { useToast } from "@chakra-ui/react";
@@ -41,7 +43,11 @@ export function CourseForm({
   };
 
   const onSubmit = useCallback(
-    async (values: ICourseFormProp) => {
+    async (
+      values: ICourseFormProp,
+      formikHelpers: FormikHelpers<ICourseFormProp>
+    ) => {
+      const { resetForm } = formikHelpers;
       setLoading(true);
       try {
         await onCreate({ ...values, thumbnailUrl });
@@ -51,6 +57,7 @@ export function CourseForm({
           status: "success",
           duration: 9000,
         });
+        resetForm();
       } catch (e) {
         console.log(e);
       } finally {
@@ -66,7 +73,7 @@ export function CourseForm({
       .max(50, "Too Long!")
       .required("Required"),
     price: Yup.number()
-      .min(1, "Too Short!")
+      .min(1, "At least 1 $")
       .max(1000, "Too Long!")
       .required("Required"),
     courseBy: Yup.number().nullable(),
@@ -158,14 +165,24 @@ export function CourseForm({
                 style={{ marginBottom: 15 }}
                 isInvalid={!!(errors.price && touched.price)}
               >
-                <Input
-                  type="number"
-                  name="price"
-                  placeholder="Price"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={price}
-                />
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    color="gray.300"
+                    fontSize="1.2em"
+                  >
+                    $
+                  </InputLeftElement>
+
+                  <Input
+                    type="number"
+                    name="price"
+                    placeholder="Price"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={price}
+                  />
+                </InputGroup>
                 {errors.price && touched.price ? (
                   <FormErrorMessage>{errors?.price}</FormErrorMessage>
                 ) : null}
