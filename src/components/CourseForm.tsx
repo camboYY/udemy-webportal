@@ -8,7 +8,7 @@ import {
   Select,
   Textarea,
 } from "@chakra-ui/react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import styled from "@emotion/styled";
@@ -43,7 +43,7 @@ export function CourseForm({
   const onSubmit = useCallback(
     async (values: ICourseFormProp) => {
       setLoading(true);
-
+      console.log({ ...values, thumbnailUrl });
       try {
         await onCreate({ ...values, thumbnailUrl });
         toast({
@@ -68,7 +68,7 @@ export function CourseForm({
       .required("Required"),
     price: Yup.number()
       .min(1, "Too Short!")
-      .max(50, "Too Long!")
+      .max(1000, "Too Long!")
       .required("Required"),
     courseBy: Yup.number().nullable(),
     courseInclude: Yup.string().required("required."),
@@ -78,6 +78,29 @@ export function CourseForm({
     createdBy: Yup.number().required("Required"),
     thumbnailUrl: Yup.string().optional(),
   });
+
+  const handleUploadImage = useCallback(
+    async (file: React.ChangeEvent<HTMLInputElement>) => {
+      const formData = new FormData();
+      formData.append("file", (file?.target?.files as FileList)[0]);
+      const imageUrl = await fetch(
+        "https://api.bytescale.com/v2/accounts/12a1z7W/uploads/form_data",
+        {
+          headers: {
+            Authorization: "Bearer public_12a1z7W2SXA8KAA2gf6traGP1kwF",
+          },
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const image = await imageUrl.json();
+
+      const fileUrl = image.files[0].fileUrl;
+      setThumbnailUrl(fileUrl);
+    },
+    []
+  );
 
   const onUploadFile = async (fileInput: string) => {
     const getUploadUrl = await fetch(
@@ -136,8 +159,18 @@ export function CourseForm({
         },
       }) => {
         return (
-          <form onSubmit={handleSubmit}>
-            <StyledContainer>
+          <StyledContainer>
+            <Input
+              style={{ marginBottom: 15 }}
+              name="thumbnailUrl"
+              id="upload"
+              type="file"
+              accept="image/*"
+              multiple={false}
+              onChange={handleUploadImage}
+              placeholder="upload your thumbnail"
+            />
+            <form onSubmit={handleSubmit}>
               <FormControl
                 style={{ marginBottom: 15 }}
                 isInvalid={!!(errors.title && touched.title)}
@@ -294,56 +327,11 @@ export function CourseForm({
                 ) : null}
               </FormControl>
 
-              <FormControl
-                isInvalid={!!(errors.createdBy && touched.createdBy)}
-                style={{ marginBottom: 15 }}
-              >
-                <Select
-                  placeholder="Select Author"
-                  name="createdBy"
-                  value={createdBy}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                >
-                  {users.length > 0
-                    ? users.map((x, i) => (
-                        <>
-                          <option key={i} value={x.id}>
-                            {x.name}
-                          </option>
-                        </>
-                      ))
-                    : null}
-                </Select>
-                {errors.createdBy && touched.createdBy ? (
-                  <FormErrorMessage>{errors?.createdBy}</FormErrorMessage>
-                ) : null}
-              </FormControl>
-              {/* <FormControl
-                isInvalid={!!(errors.thumbnailUrl && touched.thumbnailUrl)}
-                style={{ marginBottom: 15 }}
-              >
-                <Input
-                  name="thumbnailUrl"
-                  id="upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={async (e) => {
-                    const url = await onUploadFile(e.target.value);
-                    console.log({ url });
-                    setThumbnailUrl(url);
-                  }}
-                  value={thumbnailUrl}
-                />
-                {errors.thumbnailUrl && touched.thumbnailUrl ? (
-                  <FormErrorMessage>{errors?.thumbnailUrl}</FormErrorMessage>
-                ) : null}
-              </FormControl> */}
               <Button isLoading={loading} type="submit">
                 Submit
               </Button>
-            </StyledContainer>
-          </form>
+            </form>
+          </StyledContainer>
         );
       }}
     </Formik>
