@@ -1,7 +1,6 @@
 "use server";
 
 import { ICategoryFormProp } from "@/types";
-import { getToken } from "../_lib/lib";
 
 export async function createCategory(props: ICategoryFormProp) {
   const { name, parentId } = props;

@@ -12,10 +12,11 @@ export async function logout() {
 export async function signup(props: RegisterFormProp) {
   const auth = await fetch(`http://103.252.119.85:8080/api/auth/signup`, {
     method: "POST",
-    body: JSON.stringify({ ...props, role: ["admin"] }),
+    body: JSON.stringify({ ...props, role: "teacher" }),
     headers: new Headers({ "content-type": "application/json" }),
     mode: "no-cors",
   });
+
   if (auth.ok) {
     redirect("/login");
   }
@@ -28,16 +29,25 @@ export async function login({
   username: string;
   password: string;
 }) {
-  const auth = await fetch(`http://103.252.119.85:8080/api/auth/login`, {
-    method: "POST",
-    body: JSON.stringify({ username, password }),
-    headers: new Headers({ "content-type": "application/json" }),
-    mode: "no-cors",
-  });
+  let redirectPath: string | null = null;
 
-  if (auth.ok) {
-    const { token } = await auth.json();
-    await createSession(token);
-    redirect("/dashboard/overview");
+  try {
+    const auth = await fetch(`http://103.252.119.85:8080/api/auth/login`, {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: new Headers({ "content-type": "application/json" }),
+      mode: "no-cors",
+    });
+
+    if (auth.ok) {
+      const { token } = await auth.json();
+      redirectPath = "/dashboard/overview";
+      await createSession({ token });
+    }
+  } catch (e) {
+    redirectPath = "/login";
+    console.log(e);
+  } finally {
+    if (redirectPath) redirect(redirectPath);
   }
 }
