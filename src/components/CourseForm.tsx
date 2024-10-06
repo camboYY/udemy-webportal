@@ -1,4 +1,5 @@
 "use client";
+import { ICategoryFormProp, ICourseFormProp, User } from "@/types";
 import {
   Button,
   Checkbox,
@@ -9,13 +10,12 @@ import {
   InputLeftElement,
   Select,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
-import React, { useCallback, useState } from "react";
-import { Formik, FormikHelpers } from "formik";
-import * as Yup from "yup";
 import styled from "@emotion/styled";
-import { useToast } from "@chakra-ui/react";
-import { ICategoryFormProp, ICourseFormProp, User } from "@/types";
+import { Formik, FormikHelpers } from "formik";
+import React, { useCallback, useState } from "react";
+import * as Yup from "yup";
 
 export function CourseForm({
   onCreate,
@@ -310,7 +310,11 @@ export function CourseForm({
                 ) : null}
               </FormControl>
 
-              <Button isLoading={loading} type="submit">
+              <Button
+                isLoading={loading}
+                type="submit"
+                style={{ width: "100%" }}
+              >
                 Submit
               </Button>
             </form>

@@ -1,7 +1,6 @@
-import { Button, Divider, List, ListItem } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
-import { Metadata } from "next";
 import { SideBar } from "@/components";
+import { Metadata } from "next";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "E-learning - Dashboard",
@@ -34,12 +33,12 @@ export default function Layout({
       </div>
       <div
         style={{
-          marginLeft: 10,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           paddingTop: 10,
           paddingBottom: 10,
+          width: "100%",
         }}
       >
         {children}

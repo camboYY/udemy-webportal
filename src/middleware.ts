@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./app/_lib/lib";
 
 // 1. Specify protected and public routes
@@ -7,7 +7,6 @@ const protectedRoutes = [
   "/dashboard",
   "/",
   "/dashboard/invoices",
-  "/dashboard/payments",
   "/dashboard/courses",
   "teachers",
   "/dashboard/categories",
