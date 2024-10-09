@@ -1,8 +1,8 @@
 "use server";
 
+import { RegisterFormProp } from "@/types";
 import { redirect } from "next/navigation";
 import { createSession, deleteSession } from "../_lib/lib";
-import { RegisterFormProp } from "@/types";
 
 export async function logout() {
   deleteSession();
@@ -32,7 +32,7 @@ export async function login({
   let redirectPath: string | null = null;
 
   try {
-    const auth = await fetch(`http://103.252.119.85:8080/api/auth/login`, {
+    const auth = await fetch(`http://103.252.119.85:8080/api/admins/login`, {
       method: "POST",
       body: JSON.stringify({ username, password }),
       headers: new Headers({ "content-type": "application/json" }),
@@ -46,7 +46,7 @@ export async function login({
     }
   } catch (e) {
     redirectPath = "/login";
-    console.log(e);
+    throw e;
   } finally {
     if (redirectPath) redirect(redirectPath);
   }

@@ -1,11 +1,16 @@
 "use client";
-import { Button, FormControl, FormErrorMessage, Input } from "@chakra-ui/react";
-import React, { useCallback, useState } from "react";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import styled from "@emotion/styled";
 import { RegisterFormProp } from "@/types";
-import { useToast } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
+import styled from "@emotion/styled";
+import { Formik } from "formik";
+import { useCallback, useState } from "react";
+import * as Yup from "yup";
 
 export function RegisterForm({
   onRegister,
@@ -29,6 +34,12 @@ export function RegisterForm({
         });
       } catch (e) {
         console.info(e);
+        toast({
+          title: "Account created.",
+          description: "Your registration has not been success!",
+          status: "error",
+          duration: 9000,
+        });
       } finally {
         setLoading(false);
       }

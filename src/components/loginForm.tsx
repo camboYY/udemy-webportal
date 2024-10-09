@@ -1,10 +1,16 @@
 "use client";
-import { Button, FormControl, FormErrorMessage, Input } from "@chakra-ui/react";
-import React, { useCallback, useState } from "react";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import styled from "@emotion/styled";
 import { ILoginFormProp } from "@/types";
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
+import styled from "@emotion/styled";
+import { Formik } from "formik";
+import { useCallback, useState } from "react";
+import * as Yup from "yup";
 
 export function LoginForm({
   login,
@@ -12,6 +18,7 @@ export function LoginForm({
   login: (props: ILoginFormProp) => Promise<void>;
 }) {
   const [loading, setLoading] = useState(false);
+  const toast = useToast({ position: "top" });
   const initialValues: ILoginFormProp = {
     username: "",
     password: "",
@@ -25,6 +32,12 @@ export function LoginForm({
         await login({ username, password });
       } catch (e) {
         console.log(e);
+        toast({
+          title: "logged in.",
+          description: "Your failed",
+          status: "error",
+          duration: 9000,
+        });
       } finally {
         setLoading(false);
       }
