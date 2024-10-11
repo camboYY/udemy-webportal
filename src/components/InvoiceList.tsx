@@ -1,3 +1,5 @@
+"use client";
+import { IInvoice } from "@/types";
 import {
   Button,
   ButtonGroup,
@@ -11,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { ShowModalInvoice } from "./ShowModalInvoice";
 
-export function InvoiceList() {
+export function InvoiceList({ list }: { list: IInvoice[] }) {
   return (
     <TableContainer>
       <Table variant="simple" colorScheme="teal" size="md">
@@ -28,22 +30,24 @@ export function InvoiceList() {
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td>0001</Td>
-            <Td>24-09-2024</Td>
-            <Td>inches</Td>
-            <Td isNumeric>2</Td>
-            <Td isNumeric>1</Td>
-            <Td isNumeric>25.4</Td>
-            <Td>PENDING</Td>
-            <Td>
-              <ButtonGroup>
-                <Button>Pay Now</Button>
-                <ShowModalInvoice />
-              </ButtonGroup>
-            </Td>
-          </Tr>
-          <Tr>
+          {list.map((x, i) => (
+            <Tr key={i}>
+              <Td>{x.id}</Td>
+              <Td>{x.createdAt}</Td>
+              <Td>{x.name}</Td>
+              <Td isNumeric></Td>
+              <Td isNumeric>1</Td>
+              <Td isNumeric>{x.totalAmount}</Td>
+              <Td>PENDING</Td>
+              <Td>
+                <ButtonGroup>
+                  <Button>Pay Now</Button>
+                  <ShowModalInvoice />
+                </ButtonGroup>
+              </Td>
+            </Tr>
+          ))}
+          {/* <Tr>
             <Td>0002</Td>
             <Td>02-09-2024</Td>
             <Td>inches</Td>
@@ -71,7 +75,7 @@ export function InvoiceList() {
                 <ShowModalInvoice />
               </ButtonGroup>
             </Td>
-          </Tr>
+          </Tr> */}
         </Tbody>
       </Table>
     </TableContainer>

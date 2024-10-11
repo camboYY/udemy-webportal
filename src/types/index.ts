@@ -69,3 +69,21 @@ export type ICourseLessonForm = ICourseLesson & {
 };
 
 export type ICourseTagProps = ICourseTag & { id: number };
+
+export type UpgradingNewRole = {
+  [key: string]: any;
+};
+export type NewRoleProp = {
+  upgradingRole: (props: {
+    role: string;
+    userId: number;
+  }) => Promise<UpgradingNewRole[]>;
+  list: UpgradingNewRole[];
+};
+
+export type IInvoice = {
+  id: number;
+  name: string;
+  totalAmount: number;
+  createdAt: string;
+};

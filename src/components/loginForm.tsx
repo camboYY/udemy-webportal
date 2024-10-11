@@ -42,7 +42,7 @@ export function LoginForm({
         setLoading(false);
       }
     },
-    [login]
+    [login, toast]
   );
 
   const loginSchema = Yup.object().shape({
