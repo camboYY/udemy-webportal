@@ -35,7 +35,7 @@ export function InvoiceList({ list }: { list: IInvoice[] }) {
               <Td>{x.id}</Td>
               <Td>{x.createdAt}</Td>
               <Td>{x.name}</Td>
-              <Td isNumeric></Td>
+              <Td isNumeric>1</Td>
               <Td isNumeric>1</Td>
               <Td isNumeric>{x.totalAmount}</Td>
               <Td>PENDING</Td>
@@ -47,35 +47,6 @@ export function InvoiceList({ list }: { list: IInvoice[] }) {
               </Td>
             </Tr>
           ))}
-          {/* <Tr>
-            <Td>0002</Td>
-            <Td>02-09-2024</Td>
-            <Td>inches</Td>
-            <Td isNumeric>2</Td>
-            <Td isNumeric>1</Td>
-            <Td isNumeric>25.4</Td>
-            <Td>PAID</Td>
-            <Td>
-              <ButtonGroup>
-                <Button>Paid</Button>
-                <ShowModalInvoice />
-              </ButtonGroup>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>0003</Td>
-            <Td>25-09-2024</Td>
-            <Td>inches</Td>
-            <Td isNumeric>2</Td>
-            <Td isNumeric>10</Td>
-            <Td isNumeric>100.4</Td>
-            <Td>PENDING</Td>
-            <Td>
-              <ButtonGroup>
-                <ShowModalInvoice />
-              </ButtonGroup>
-            </Td>
-          </Tr> */}
         </Tbody>
       </Table>
     </TableContainer>

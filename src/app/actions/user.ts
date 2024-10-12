@@ -35,6 +35,7 @@ export async function getListOfRequestingUpgradingUserRole() {
       }
     );
     const list = await listOfUserRequestingNewRole.json();
+
     return list;
   } catch (e) {
     throw e;
@@ -57,7 +58,8 @@ export async function upgradeRole(props: { role: string; userId: number }) {
       }
     );
     await result.json();
-    return await getListOfRequestingUpgradingUserRole();
+    const list = await getListOfRequestingUpgradingUserRole();
+    return list;
   } catch (e) {
     throw e;
   }
