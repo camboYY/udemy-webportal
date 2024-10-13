@@ -1,8 +1,6 @@
-import { createCourse, onSearchCourse } from "@/app/actions/course";
+import { createCourse } from "@/app/actions/course";
 import { getUsers } from "@/app/actions/user";
 import { CourseForm } from "@/components/CourseForm";
-import { UpdateCourse } from "@/components/UpdateCourse";
-import React from "react";
 
 export default async function Courses() {
   const users = await getUsers();
@@ -20,7 +18,8 @@ export default async function Courses() {
         categories={categories}
         users={users}
       />
-      <UpdateCourse onSearchCourse={onSearchCourse} />
+      {/* we will enable below later on */}
+      {/* <UpdateCourse onSearchCourse={onSearchCourse} /> */}
     </div>
   );
 }

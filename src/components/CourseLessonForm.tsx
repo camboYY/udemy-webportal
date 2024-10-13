@@ -1,5 +1,11 @@
 "use client";
 import {
+  ICourseFormProp,
+  ICourseFormWithIdProp,
+  ICourseLesson,
+  User,
+} from "@/types";
+import {
   Button,
   Checkbox,
   FormControl,
@@ -10,16 +16,10 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, useCallback, useState } from "react";
-import { Formik, FormikHelpers } from "formik";
-import * as Yup from "yup";
 import styled from "@emotion/styled";
-import {
-  ICourseFormProp,
-  ICourseFormWithIdProp,
-  ICourseLesson,
-  User,
-} from "@/types";
+import { Formik, FormikHelpers } from "formik";
+import React, { ChangeEvent, useCallback, useState } from "react";
+import * as Yup from "yup";
 import { CourseCard } from "./CourseCard";
 
 export function CourseLessonForm({
@@ -80,7 +80,7 @@ export function CourseLessonForm({
         `https://api.cloudflare.com/client/v4/accounts/b6563a58441e13961e89a7cbc2cec3b3/stream/${uid}`,
         {
           headers: {
-            Authorization: `Bearer vmrZjHrDkPvPgWCSUFlIMyJ7VWe5E0m-rfF9q5vD`,
+            Authorization: `Bearer qYTKmUiikUAT1_bJdk-8ppHeIjsiQMRJ9ouUTo9J`,
           },
         }
       );
@@ -109,7 +109,7 @@ export function CourseLessonForm({
         formData.append("file", videoFile);
         await fetch(`${uploadURL}`, {
           headers: {
-            Authorization: `Bearer vmrZjHrDkPvPgWCSUFlIMyJ7VWe5E0m-rfF9q5vD`,
+            Authorization: `Bearer qYTKmUiikUAT1_bJdk-8ppHeIjsiQMRJ9ouUTo9J`,
           },
           method: "POST",
           body: formData,
@@ -133,7 +133,6 @@ export function CourseLessonForm({
           {
             headers: {
               Authorization: "Bearer vmrZjHrDkPvPgWCSUFlIMyJ7VWe5E0m-rfF9q5vD",
-              "Content-Type": "text/plain",
             },
             method: "POST",
             body: JSON.stringify({
@@ -194,11 +193,11 @@ export function CourseLessonForm({
   const loginSchema = Yup.object().shape({
     title: Yup.string()
       .min(2, "Too Short!")
-      .max(30, "Too Long!")
+      .max(1000, "Too Long!")
       .required("Required"),
     description: Yup.string()
       .min(2, "Too Short!")
-      .max(30, "Too Long!")
+      .max(1000, "Too Long!")
       .required("Required"),
     videoUrl: Yup.string().optional(),
     satus: Yup.boolean().default(false),
@@ -206,6 +205,7 @@ export function CourseLessonForm({
     courseId: Yup.number().required("Required"),
   });
 
+  console.log({ users });
   return (
     <div style={{ marginBottom: 10 }}>
       <div
@@ -280,13 +280,17 @@ export function CourseLessonForm({
                   style={{ marginBottom: 15 }}
                   isInvalid={!!(errors.videoUrl && touched.videoUrl)}
                 >
-                  <Input
-                    type="file"
-                    name="videoUrl"
-                    placeholder="video link"
-                    onBlur={handleBlur}
-                    onChange={onUploadFile}
-                  />
+                  <Uploading>
+                    Upload Image
+                    <Input
+                      type="file"
+                      name="videoUrl"
+                      placeholder="video link"
+                      onBlur={handleBlur}
+                      onChange={onUploadFile}
+                      className="file-upload"
+                    />
+                  </Uploading>
                   {uploadLoading ? (
                     <Progress hasStripe size="xs" isIndeterminate />
                   ) : null}
@@ -355,4 +359,17 @@ const StyledContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 25rem;
+`;
+
+const Uploading = styled.label`
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border-radius: 4px;
+
+  .file-upload {
+    display: none; /* Hide the original file input */
+  }
 `;

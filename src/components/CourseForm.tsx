@@ -87,23 +87,27 @@ export function CourseForm({
 
   const handleUploadImage = useCallback(
     async (file: React.ChangeEvent<HTMLInputElement>) => {
-      const formData = new FormData();
-      formData.append("file", (file?.target?.files as FileList)[0]);
-      const imageUrl = await fetch(
-        "https://api.bytescale.com/v2/accounts/12a1z7W/uploads/form_data",
-        {
-          headers: {
-            Authorization: "Bearer public_12a1z7W2SXA8KAA2gf6traGP1kwF",
-          },
-          method: "POST",
-          body: formData,
-        }
-      );
+      try {
+        const formData = new FormData();
+        formData.append("file", (file?.target?.files as FileList)[0]);
+        const imageUrl = await fetch(
+          "https://api.bytescale.com/v2/accounts/12a1z7W/uploads/form_data",
+          {
+            headers: {
+              Authorization: "Bearer public_kW15cFjCv5vq8ak5htwhH4CWhdfB",
+            },
+            method: "POST",
+            body: formData,
+          }
+        );
 
-      const image = await imageUrl.json();
-
-      const fileUrl = image.files[0].fileUrl;
-      setThumbnailUrl(fileUrl);
+        const image = await imageUrl.json();
+        console.log({ image });
+        const fileUrl = image.files[0].fileUrl;
+        setThumbnailUrl(fileUrl);
+      } catch (e) {
+        console.log(e);
+      }
     },
     []
   );

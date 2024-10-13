@@ -1,17 +1,13 @@
+import { getUsers } from "@/app/actions";
+import { onCreateCourseLesson, onSearchCourse } from "@/app/actions/course";
 import { CourseLessonForm } from "@/components/CourseLessonForm";
-import { onSearchCourse, onCreateCourseLesson } from "@/app/actions/course";
 
 export default async function CourseLessons() {
-  const userList = await fetch("http://103.252.119.85:8080/api/users/list", {
-    method: "GET",
-    headers: new Headers({ "content-type": "application/json" }),
-    mode: "no-cors",
-  });
-  const users = await userList.json();
+  const userList = await getUsers();
 
   return (
     <CourseLessonForm
-      users={users}
+      users={userList}
       onCreate={onCreateCourseLesson}
       onSearchCourse={onSearchCourse}
     />
