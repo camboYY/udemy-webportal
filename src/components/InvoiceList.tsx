@@ -22,8 +22,6 @@ export function InvoiceList({ list }: { list: IInvoice[] }) {
             <Th>#</Th>
             <Th>Created Date</Th>
             <Th>Note</Th>
-            <Th isNumeric>Qty</Th>
-            <Th isNumeric>Unit Price</Th>
             <Th isNumeric>Total</Th>
             <Th>Status</Th>
             <Th isNumeric>Action</Th>
@@ -35,8 +33,6 @@ export function InvoiceList({ list }: { list: IInvoice[] }) {
               <Td>{x.id}</Td>
               <Td>{x.createdAt}</Td>
               <Td>{x.name}</Td>
-              <Td isNumeric>1</Td>
-              <Td isNumeric>1</Td>
               <Td isNumeric>{x.totalAmount}</Td>
               <Td>PENDING</Td>
               <Td>
