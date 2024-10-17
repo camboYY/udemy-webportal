@@ -63,10 +63,10 @@ export function CourseLessonForm({
     setSearchLoading(true);
     const courseList = await onSearchCourse(query);
     setCourses(courseList);
-    if (courseList.length === 1) {
+    if (courseList?.length === 1) {
       setCourse(courseList[0]);
     }
-    if (courseList.length === 0) {
+    if (courseList?.length === 0) {
       setCourseNotFound("Course not found");
     } else {
       setCourseNotFound("");
@@ -238,7 +238,7 @@ export function CourseLessonForm({
           return (
             <form onSubmit={handleSubmit}>
               <StyledContainer>
-                {courses.length > 0 && (
+                {courses?.length > 0 && (
                   <CourseCard onChosen={onCourseChosen} courses={courses} />
                 )}
                 {!!courseNotFound && (

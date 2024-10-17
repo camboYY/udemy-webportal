@@ -9,7 +9,7 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import React, { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 
 export function UpdateCourse({
   onSearchCourse,
@@ -41,10 +41,10 @@ export function UpdateCourse({
     setSearchLoading(true);
     const courseList = await onSearchCourse(query);
     setCourses(courseList);
-    if (courseList.length === 1) {
+    if (courseList?.length === 1) {
       setCourse(courseList[0]);
     }
-    if (courseList.length === 0) {
+    if (courseList?.length === 0) {
       setCourseNotFound("Course not found");
     } else {
       setCourseNotFound("");
@@ -71,7 +71,7 @@ export function UpdateCourse({
           Search
         </Button>
       </div>
-      {courses.length > 0 ? (
+      {courses?.length > 0 ? (
         <Stack spacing={5}>
           {courses.map((cr, i) => (
             <Card key={i}>

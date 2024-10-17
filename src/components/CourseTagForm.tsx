@@ -1,11 +1,16 @@
 "use client";
-import { Button, FormControl, FormErrorMessage, Input } from "@chakra-ui/react";
-import React, { ChangeEvent, useCallback, useState } from "react";
-import { Formik, FormikHelpers } from "formik";
-import * as Yup from "yup";
-import styled from "@emotion/styled";
 import { ICourseFormProp, ICourseFormWithIdProp, ICourseTag } from "@/types";
-import { useToast } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
+import styled from "@emotion/styled";
+import { Formik, FormikHelpers } from "formik";
+import { ChangeEvent, useCallback, useState } from "react";
+import * as Yup from "yup";
 import { CourseCard } from "./CourseCard";
 
 export function CourseTagForm({
@@ -42,10 +47,10 @@ export function CourseTagForm({
     setSearchLoading(true);
     const courseList = await onSearchCourse(query);
     setCourses(courseList);
-    if (courseList.length === 1) {
+    if (courseList?.length === 1) {
       setCourse(courseList[0]);
     }
-    if (courseList.length === 0) {
+    if (courseList?.length === 0) {
       setCourseNotFound("Course not found");
     } else {
       setCourseNotFound("");
@@ -118,7 +123,7 @@ export function CourseTagForm({
           return (
             <form onSubmit={handleSubmit}>
               <StyledContainer>
-                {courses.length > 0 && (
+                {courses?.length > 0 && (
                   <CourseCard onChosen={onCourseChosen} courses={courses} />
                 )}
                 {!!courseNotFound && (

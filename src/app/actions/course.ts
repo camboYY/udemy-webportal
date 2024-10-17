@@ -1,6 +1,7 @@
 "use server";
 
 import { ICourseFormProp, ICourseLesson, ICourseTag } from "@/types";
+import { getToken } from "../_lib/lib";
 
 export async function createCourse(props: ICourseFormProp) {
   const result = await fetch("http://103.252.119.85:8080/api/courses", {
@@ -32,15 +33,20 @@ export const onCreateCourseTag = async (props: ICourseTag) => {
 };
 
 export async function onSearchCourse(course?: string) {
+  const token = await getToken();
+
   try {
     const result = await fetch(
-      `http://103.252.119.85:8080/api/courses/page/1?keyword=${course}`,
+      `http://103.252.119.85:8080/api/admins/searchByStringWithAuthor/page/1?keyword=${course}`,
       {
-        headers: new Headers({ "content-type": "application/json" }),
+        headers: new Headers({
+          "content-type": "application/json",
+          Authorization: "Bearer " + token,
+        }),
         mode: "no-cors",
       }
     );
-
+    console.log({ result });
     if (result.ok) return await result.json();
   } catch (e) {
     console.log(e);
